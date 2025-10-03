@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Meezok_Vault]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>site-lib/media/favicon.png</url><title>Meezok_Vault</title><link></link></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Fri, 03 Oct 2025 20:21:10 GMT</lastBuildDate><atom:link href="site-lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 03 Oct 2025 20:20:55 GMT</pubDate><ttl>60</ttl><dc:creator></dc:creator><item><title><![CDATA[Linux References]]></title><description><![CDATA[
+These are my personal notes from the early days of my Linux learning journey. Over time, I’ve made significant progress, and I decided to share them openly so that others. Whether completely new to Linux or already technical can also benefit. Note: This is not a complete guide. I’m still learning, so this collection will be updated frequently as I gain more knowledge and experience. I’m a Cybersecurity student at the University of Technology and Applied Science with a strong interest in Purple Teaming the balance of attack and defense. I enjoy hands-on labs, Capture the Flag challenges, and sharing what I learn. This course is part of my journey and is designed to document my journey and build confidence in Linux through simple, practical notes and examples.
+<a href=".?query=tag:resources/linux" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux">#resources/linux</a> The following resources helped me build a solid foundation in Linux. You don’t need all of them ; just one is enough to get started and even prepare for Capture the Flag (CTF) challenges or general cybersecurity learning. However, if you’re willing to invest, I highly recommend going deeper with a paid resource, as it covers essential Linux concepts in much more detail. <br><a data-tooltip-position="top" aria-label="https://youtu.be/U1w4T03B30I?si=uPsuUn1ueXUEOC8k" rel="noopener nofollow" class="external-link is-unresolved" href="https://youtu.be/U1w4T03B30I?si=uPsuUn1ueXUEOC8k" target="_self">Cyber Mentor – 3 Hour Linux Course (YouTube, Free)</a>
+A beginner-friendly crash course that provides enough knowledge to start exploring more advanced topics like privilege escalation. <br><a data-tooltip-position="top" aria-label="https://www.amazon.com/Linux-Basics-Hackers-Networking-Scripting/dp/1593278551" rel="noopener nofollow" class="external-link is-unresolved" href="https://www.amazon.com/Linux-Basics-Hackers-Networking-Scripting/dp/1593278551" target="_self">Linux Basics for Hackers (Book)</a>
+A highly recommended book that introduces Linux from a hacker’s perspective, focusing on practical skills in networking, scripting, and security. Linux terminology and the basics completed
+text manipulation - completed
+analyzing and managing network files - Completed
+adding and removing software's - not complete GUI part left
+controlling file and directory permissions - parsley completed process management - Nice left - 1 topic
+user environment variable - Done
+bash scripting - completed but add extra stuff from book
+compressing and archiving - Not completed storage device management - Not completed
+logging system - introduced but Not Completed
+using and abusing services - Completed
+]]></description><link>linux-references.html</link><guid isPermaLink="false">Linux References.md</guid><pubDate>Fri, 03 Oct 2025 19:21:29 GMT</pubDate></item><item><title><![CDATA[Managing-DNS]]></title><description><![CDATA[<a href=".?query=tag:resources/networking/dns" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/networking/dns">#resources/networking/dns</a>
+DNS (Domain Name System) is a core part of internet infrastructure.
+While its purpose is to resolve domain names into IP addresses, hackers and sysadmins can manipulate or inspect DNS for reconnaissance, redirection, or debugging.
+<br><a data-href="DNS-Domain name System-53" href="notes/networking/dns-domain-name-system-53.html" class="internal-link" target="_self" rel="noopener nofollow">DNS-Domain name System-53</a>
+<br><a data-href="Recon-Dns" href="notes/red-team/recon-and-enum/recon-dns.html" class="internal-link" target="_self" rel="noopener nofollow">Recon-Dns</a>
+<br><a data-href="DNS poisoning" href="notes/red-team/exploit/dns-poisoning.html" class="internal-link" target="_self" rel="noopener nofollow">DNS poisoning</a>
+<br><a href=".?query=tag:resources/networking/dns/manage" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/networking/dns/manage">#resources/networking/dns/manage</a>dig hackers-arise.com ns
+<br><img alt="06-10-linux-network-27_Jul_2025.png" src="my-assets/linux-assets/06-10-linux-network-27_jul_2025.png" target="_self">
+This reveals what servers control DNS for the domain and where they are hosted.
+dig hackers-arise.com mx
+<br><img alt="06-13-linux-network-27_Jul_2025.png" src="my-assets/linux-assets/06-13-linux-network-27_jul_2025.png" target="_self"> Useful for identifying email infrastructure.
+Attackers may use this for phishing or targeting mail servers.DNS servers are listed in:/etc/resolv.conf use your favorite text editor.
+leafpad /etc/resolv.conf
+nameserver 8.8.8.8 # Google DNS
+nameserver 192.168.181.2 # Local DNS
+Order matters: the system checks from top to bottom.echo "nameserver 8.8.8.8" &gt; /etc/resolv.conf
+<br><img alt="06-15-linux-network-27_Jul_2025.png" src="my-assets/linux-assets/06-15-linux-network-27_jul_2025.png" target="_self">
+Note: If using DHCP, this file might be overwritten automatically when the lease renews.
+The /etc/hosts file lets you override DNS locally by mapping hostnames to IP addresses. This is useful in CTFs when a challenge requires you to access a service by a specific domain name , you can map that domain to the target IP so your browser or tools connect correctly.Example (requires root):sudo sh -c 'echo "10.10.10.5 challenge.local" &gt;&gt; /etc/hosts'
+sudo nano /etc/host
+Notes
+Changes affect only your machine. Remove or comment out the entry when finished to avoid future confusion. leafpad /etc/hosts
+127.0.0.1 localhost
+127.0.1.1 kali
+# redirected
+192.168.23.135 youtube.com
+<br><img alt="06-15-linux-network-27_Jul_2025.png" src="my-assets/linux-assets/06-15-linux-network-27_jul_2025.png" target="_self">
+USE TAB, not space, between the IP and domain.
+Any time this system accesses youtube.com, it will be redirected to 192.168.23.131 — skipping real DNS lookup.Combined with tools like:
+dnsspoof
+Ettercap
+ARP poisoning
+You can redirect LAN users to a fake login page or test server.]]></description><link>notes/networking/managing-dns.html</link><guid isPermaLink="false">notes/networking/Managing-DNS.md</guid><pubDate>Fri, 03 Oct 2025 18:42:28 GMT</pubDate><enclosure url="my-assets/linux-assets/06-10-linux-network-27_jul_2025.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;my-assets/linux-assets/06-10-linux-network-27_jul_2025.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Linux services]]></title><description><![CDATA[<a href=".?query=tag:resources/linux/services" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/services">#resources/linux/services</a> -sudo systemctl enable [service] =&gt; enable service on boot
+-sudo systemctl disable [service] =&gt; disable service on boot -sudo systemctl start [service] =&gt; start the service
+-sudo systemctl stop [service] =&gt; stop the service
+-sudo systemctl restart [service] =&gt; reset the service
+-sudo systemctl status [service] =&gt; view the status of the service
+sudo service apache2 start
+sudo service apache2 stop file path for the webpage to add your html-code : /var/www/html/python3 -m http.server --&gt; host a server on the directory you are in.
+use cases
+-its usefull to download files to your host machine if u are using a vm.
+example use case: access my server via SSH
+-sudo systemctl enable sshd
+-sudo systemctl disable sshd
+-sudo systemctl start sshd
+-sudo systemctl stop sshd
+-sudo systemctl restart sshd
+-sudo systemctl status sshd Updog GitHub repo of python based webpage that hosts a directory for convenient for filesharing with better UI.
+But python3 model is Faster to setup python3 -m http.server .
+pipx install updog
+updog --help or -h
+<br><img alt="Mon-July-linux-05-53.png" src="my-assets/linux-assets/mon-july-linux-05-53.png" target="_self"><br><img alt="Mon-July-linux-05-52.png" src="my-assets/linux-assets/mon-july-linux-05-52.png" target="_self"><br><img alt="Mon-July-linux-05-37.png" src="my-assets/linux-assets/mon-july-linux-05-37.png" target="_self">]]></description><link>notes/linux/linux-services.html</link><guid isPermaLink="false">notes/Linux/Linux services.md</guid><pubDate>Fri, 03 Oct 2025 18:32:50 GMT</pubDate><enclosure url="my-assets/linux-assets/mon-july-linux-05-53.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;my-assets/linux-assets/mon-july-linux-05-53.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Processes Introduction and Management]]></title><description><![CDATA[<img alt="06-26-32-linux-31-Jul-2025.png" src="my-assets/linux-assets/06-26-32-linux-31-jul-2025.png" target="_self"><br><a href=".?query=tag:resources/linux/proccesses" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/proccesses">#resources/linux/proccesses</a> processes is Program running in the Background of a system.
+they are Managed by the Kernel.
+the kernel Assign's the Process that has a unique PID and it gets incremented for the order. Example 60th proccess = PID 60.
+ps =&gt; display current proccess runed by the user
+ps aux =&gt; display current proccess runs on the system and all users. ps:<br>
+<img alt="06-45-14-linux-31-Jul-2025.png" src="my-assets/linux-assets/06-45-14-linux-31-jul-2025.png" target="_self">
+ps aux:<br>
+<img alt="06-49-56-linux-31-Jul-2025.png" src="my-assets/linux-assets/06-49-56-linux-31-jul-2025.png" target="_self"> USER : the user who initiated the process
+PID : the Process id %CPU : CPU usage in %
+COMMAND : the Command that started the Process
+<br><a href=".?query=tag:resources/linux/proccesses/ps" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/proccesses/ps">#resources/linux/proccesses/ps</a> # in other tab start Metasplolit
+msfconsole
+ps aux | grep msfconsole by using ctrl + shift + F:<br>
+<img alt="07-05-35-linux-31-Jul-2025.png" src="my-assets/linux-assets/07-05-35-linux-31-jul-2025.png" target="_self">
+by grep:<br>
+<img alt="07-08-12-linux-31-Jul-2025.png" src="my-assets/linux-assets/07-08-12-linux-31-jul-2025.png" target="_self">
+<br><img alt="07-03-35-linux-31-Jul-2025.png" src="my-assets/linux-assets/07-03-35-linux-31-jul-2025.png" target="_self"><br><a href=".?query=tag:resources/linux/proccesses/manage" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/proccesses/manage">#resources/linux/proccesses/manage</a>
+<br>Kill and types <img draggable="false" class="emoji is-unresolved" alt="✅" src="https://twemoji.maxcdn.com/v/13.1.0/72x72/2705.png" target="_self">
+proccess priority with nice
+<br>running poccess in background <img draggable="false" class="emoji is-unresolved" alt="✅" src="https://twemoji.maxcdn.com/v/13.1.0/72x72/2705.png" target="_self">
+<br>foregrounding proccess <img draggable="false" class="emoji is-unresolved" alt="✅" src="https://twemoji.maxcdn.com/v/13.1.0/72x72/2705.png" target="_self">
+scheduling process and automation cron and at overview the top or htop comes in handy if u want to find the greediest process.
+top
+htop
+Note ps vs top:
+ps = ordered by the pid ascending order top = order by by the greediest.
+<br><img alt="07-12-33-linux-31-Jul-2025.png" src="my-assets/linux-assets/07-12-33-linux-31-jul-2025.png" target="_self"><br><a href=".?query=tag:resources/linux/proccesses/manage" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/proccesses/manage">#resources/linux/proccesses/manage</a> kill this command does what it says it kills the proccess but there are some options they way to end the proccess.
+We can stop a proccess by using top shutdown the proccess by pressing F9 and then you have to choose the kill signals.
+u can use kill command for faster approach kill [pid] it will preform the default kill options =&gt; SIGTERM.
+syntax for kill in terminal:
+kill -(n) [pid]
+kill -9 1333 SIGKILL SIGUP -1 =&gt; stops and restart proccess with same id
+SIGSTOP -19 =&gt; stop/suspend a proccess
+SIGINT -2 =&gt; the interupt the weakest kill sgnal
+SIGQUIT -3 =&gt; terminates a proccess the saves it in file named core
+SIGTERM -15 =&gt; the default kill signal and do clean up tasks
+SIGKILL -9 =&gt; the absolute kill signal it forces the proccess to s
+stop by sending to /dev/null and doesnt do cleanup. ex: using kill command to Stop a process: am killing my Metasploit sessionkill 91475
+<br><img alt="09-35-39-linux-31-Jul-2025.png" src="my-assets/linux-assets/09-35-39-linux-31-jul-2025.png" target="_self"><br>
+<img alt="09-35-27-linux-31-Jul-2025.png" src="my-assets/linux-assets/09-35-27-linux-31-jul-2025.png" target="_self"><br><img alt="08-33-09-linux-31-Jul-2025.png" src="my-assets/linux-assets/08-33-09-linux-31-jul-2025.png" target="_self"><br><img alt="08-31-40-linux-31-Jul-2025.png" src="my-assets/linux-assets/08-31-40-linux-31-jul-2025.png" target="_self">
+This is helpful when u need to open a Tool or Application and use the same terminal session
+[tool/application] &amp;
+# dont forget[and]
+firefox &amp; ex: mousepad &amp; -&gt; it will this text editor and it will be running in Background.<br>
+<img alt="09-42-43-linux-31-Jul-2025.png" src="my-assets/linux-assets/09-42-43-linux-31-jul-2025.png" target="_self"> The fg command in Linux brings a background job to the foreground. It lets you continue working with a paused or background-running task in your terminal. Just type fg to resume the most recent job, or fg %job_number or fg [pid] if it was running in background[&amp;] for a specific one. jobs command to view job and jon number [n].
+suspend the msfconsole by pressing ctrl + z then run fg
+command then press ctrl+c to bring the session back to normal<br>
+<img alt="10-22-20-linux-31-Jul-2025.png" src="my-assets/linux-assets/10-22-20-linux-31-jul-2025.png" target="_self"> - if the fg only has on job running in the foreground<br>
+<img alt="10-29-26-linux-31-Jul-2025.png" src="my-assets/linux-assets/10-29-26-linux-31-jul-2025.png" target="_self"> if running multiple %jobs example use fg %Job_num:<br>
+<img alt="10-30-50-linux-31-Jul-2025.png" src="my-assets/linux-assets/10-30-50-linux-31-jul-2025.png" target="_self"> viewing running jobs command<br>
+<img alt="10-33-02-linux-31-Jul-2025.png" src="my-assets/linux-assets/10-33-02-linux-31-jul-2025.png" target="_self"> scheduling process and automation cron and at overview
+create a small script
+To test at and cron i wrote simple bash script down below.
+create .sh format and sudo chmod +x script.sh
+then execute ./script.sh<br>
+<img alt="carbon.png" src="my-assets/linux-assets/carbon.png" target="_self">
+]]></description><link>notes/linux/processes-introduction-and-management.html</link><guid isPermaLink="false">notes/Linux/Processes Introduction and Management.md</guid><pubDate>Fri, 03 Oct 2025 18:28:48 GMT</pubDate><enclosure url="my-assets/linux-assets/06-26-32-linux-31-jul-2025.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;my-assets/linux-assets/06-26-32-linux-31-jul-2025.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Managing L2-L3-Protocols]]></title><description><![CDATA[<a href=".?query=tag:resources/networking/ip/manage" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/networking/ip/manage">#resources/networking/ip/manage</a> we must check routing table to check if there is device that has multiple routes.
+some networks are isolated and segmented however if we added the route on routing table
+we can access the Network(referencing routing table how it works).
+Best netstat combination: netstat -tulnp =&gt; show current udp/tcp session and ports open locally and globally Others
+netstat -a =&gt; list all services and port that are on.
+netstat -t =&gt; show tcp connection
+netstat -u =&gt; show udp connection
+netstat -l =&gt; show listing ports
+netstat -n =&gt; show in numerical not in words ex:127.0.01 not localhost:
+netstat -p =&gt; display all ports <br><img alt="Pasted image 20250618210244.png" src="my-assets/assets/pasted-image-20250618210244.png" target="_self">
+using Arp to discover and identify devices on the network.
+<br><img alt="Pasted image 20250629192548.png" src="my-assets/assets/pasted-image-20250629192548.png" target="_self"><br><a href=".?query=tag:resources/networking/ip/manage" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/networking/ip/manage">#resources/networking/ip/manage</a> eth0 (Ethernet): First wired network interface (eth1, eth2 = more wired). Shows MAC (HWaddr), IP, Broadcast (Bcast), Netmask. lo (Loopback): Localhost address (127.0.0.1). Used for testing services on your own system. wlan0 (Wireless): Appears if Wi-Fi adapter exists. Displays MAC and IP for wireless. Use Cases: Check IP/MAC. Verify interfaces are up. Troubleshoot LAN or connectivity issues. <br><img alt="05-21-linux-network-26_Jul_2025.png" src="my-assets/linux-assets/05-21-linux-network-26_jul_2025.png" target="_self">Note: Please revert your original IP configuration after you are done with this tutorial to restore internet access.<br><img alt="06-13-linux-network-26_Jul_2025.png" src="my-assets/linux-assets/06-13-linux-network-26_jul_2025.png" target="_self"><br><a href=".?query=tag:resources/networking/ip/manage" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/networking/ip/manage">#resources/networking/ip/manage</a> is useful; it helps to access other networks (IP Spoofing). Example: If you're performing a denial of service attack, changing the IP can make the attack appear to come from another source, helping to evade IP capture during forensics. It's relatively simple. sudo ifconfig eth0 192.168.34.24 <br><img alt="05-34-linux-network-26_Jul_2025.png" src="my-assets/linux-assets/05-34-linux-network-26_jul_2025.png" target="_self">sudo ifconfig eth0 192.168.2.131 netmask 255.255.240.0 broadcast 192.168.2.255
+<br><img alt="06-11-linux-network-26_Jul_2025.png" src="my-assets/linux-assets/06-11-linux-network-26_jul_2025.png" target="_self"><br><a href=".?query=tag:resources/networking/mac/manage" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/networking/mac/manage">#resources/networking/mac/manage</a> MAC Address (HWaddr): Unique ID assigned to every network device. Used by networks to identify and restrict devices. Why Spoof? Bypass MAC-based filters or tracking systems. Stay anonymous or imitate another device. Used in attacks like ARP poisoning. Attacker spoofs their MAC to match the gateway/router. Victim’s machine sends traffic to the attacker thinking it’s the router. Result: Attacker intercepts traffic → MITM (Man-in-the-Middle).
+# 1. Take down the interface
+ifconfig eth0 down # 2. Assign a new (fake) MAC address
+ifconfig eth0 hw ether 00:11:22:33:44:55 # 3. Bring the interface back up
+ifconfig eth0 up Store your old MAC address: ifconfig eth0 | grep ether | cat &gt; mymac.txt
+Try:ifconfig
+ping 127.0.0.1 Back up and revert to your original MAC address after spoofing:
+Run this before proceeding with MAC spoofing: ifconfig eth0 | grep ether | cat &gt; mymac.txt
+<br><img alt="22-39-linux-network-26_Jul_2025.png" src="my-assets/linux-assets/22-39-linux-network-26_jul_2025.png" target="_self">
+Shut down the interface eth0: sudo ifconfig eth0 down
+<br><img alt="22-49-linux-network-26_Jul_2025.png" src="my-assets/linux-assets/22-49-linux-network-26_jul_2025.png" target="_self">
+Run ifconfig and notice that eth0 isn't up in your output because it is down.Then run ifconfig eth0 to view it. <br><img alt="23-12-linux-network-26_Jul_2025.png" src="my-assets/linux-assets/23-12-linux-network-26_jul_2025.png" target="_self">
+After spoofing MAC:
+ifconfig eth0 hw ether 00:11:22:33:44:55<br>
+<img alt="23-14-linux-network-26_Jul_2025.png" src="my-assets/linux-assets/23-14-linux-network-26_jul_2025.png" target="_self">
+Checking if ping works after spoofing MAC address:<br>
+<img alt="23-18-linux-network-26_Jul_2025.png" src="my-assets/linux-assets/23-18-linux-network-26_jul_2025.png" target="_self">
+Use ifconfig to confirm the new network configuration:ifconfig
+<br><img alt="01-09-linux-network-27_Jul_2025.png" src="my-assets/linux-assets/01-09-linux-network-27_jul_2025.png" target="_self">
+Expected output (example):]]></description><link>notes/networking/managing-l2-l3-protocols.html</link><guid isPermaLink="false">notes/networking/Managing L2-L3-Protocols.md</guid><pubDate>Fri, 03 Oct 2025 18:20:59 GMT</pubDate><enclosure url="." length="0" type="false"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;.&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Manage-DHCP]]></title><description><![CDATA[<a href=".?query=tag:resources/networking/dhcp" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/networking/dhcp">#resources/networking/dhcp</a>
+In Linux, the Dynamic Host Configuration Protocol (DHCP) is responsible for assigning IP addresses automatically on a network. This is typically handled by a background service or daemon called dhcpd.
+Why it matters ?
+The DHCP server logs which IP addresses are assigned to which devices valuable information in forensic investigations for tracking attackers. Manually request a new DHCP-assigned IP without rebooting
+Understand how the dhcpcd process works
+Verify your assigned IP using command-line tools
+<br><a href=".?query=tag:resources/networking/dhcp/manage" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/networking/dhcp/manage">#resources/networking/dhcp/manage</a>Most Debian-based distros (like Kali Linux) use the dhclient(old version kali) or dhcpcd(new version) utility to interact with DHCP.
+dhcpcd --help
+sudo dhcpcd eth0 dhcpcd: The DHCP client program
+eth0: Your network interface (may vary: use ip a to list interfaces) This sends a DHCPDISCOVER request. The DHCP server responds with a DHCPOFFER, and the client confirms it with a DHCPREQUEST.
++------------+ +-----------------+
+| DHCP | | Client |
+| Server | | (e.g., Kali) |
++------------+ +-----------------+ ^ | | | (1) DHCPDISCOVER | &lt;---------------------------- | | | | | (2) DHCPOFFER | ----------------------------&gt; | | | | | (3) DHCPREQUEST | &lt;---------------------------- | | | | | (4) DHCPACK | ----------------------------&gt; | | |
+1.DHCPDISCOVER: Client broadcasts a message to find available DHCP servers. 2.DHCPOFFER: Server responds with an available IP address and configuration options. 3.DHCPREQUEST: Client requests the offered IP address. 4.DHCPACK: Server acknowledges and finalizes the IP assignment.
+]]></description><link>notes/networking/manage-dhcp.html</link><guid isPermaLink="false">notes/networking/Manage-DHCP.md</guid><pubDate>Fri, 03 Oct 2025 18:13:48 GMT</pubDate></item><item><title><![CDATA[Package Management]]></title><description><![CDATA[<a href=".?query=tag:resources/linux/packages" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/packages">#resources/linux/packages</a> /etc/apt/ The apt tool in kali manages software packages and sources. Instead of using dpkg, apt lets you install, update, and remove software easily and securely. Repositories can be added manually or with add-apt-repository. Adding trusted GPG keys ensures the software’s authenticity. For example, to install Sublime Text (not in default repos), you add its repository and GPG key so it stays updated with your system.
+sudo apt autoremove [package-name]
+sudo apt perge [packege-name] # removes app and its packages (Everything)
+sudo apt install [package-name]
+sudo apt update -y
+sudo apt list --upgradable
+sudo apt upgrade -y
+sudo apt search [Packagename] # search packagname dpkg package installer .deb:
+sudo dpkg -i app.deb since subline text editor is not part kali Linux default repositories. When adding software, the integrity of what we download is guaranteed by the use of what is called GPG (Gnu Privacy Guard) keys. These keys are essentially a safety check from the developers saying, "here's our software". If the keys do not match up to what your system trusts and what the developers used, then the software will not be downloaded. <br><img alt="13-41-28-linux-31-Jul-2025.png" src="my-assets/linux-assets/13-41-28-linux-31-jul-2025.png" target="_self">
+Let's download the GPG key and use apt-key to trust it: - wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/sublimehq-archive-keyring.gpg &gt; /dev/null - echo "deb [signed-by=/usr/share/keyrings/sublimehq-archive-keyring.gpg] https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list - sudo apt update &amp;&amp; sudo apt install sublime-text <br><img alt="13-51-55-linux-31-Jul-2025.png" src="my-assets/linux-assets/13-51-55-linux-31-jul-2025.png" target="_self"><br>
+<img alt="13-53-55-linux-31-Jul-2025.png" src="my-assets/linux-assets/13-53-55-linux-31-jul-2025.png" target="_self">patching is best practice.<br>
+<a href=".?query=tag:resources/linux/basics" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/basics">#resources/linux/basics</a> the update will look for the well known Repositories then the upgrade will patch to new version of application running on the machine. lets try it out Some updates require Root privilege's to execute: as u can see in this image these are the old packages<br>
+<img alt="Pasted image 20250619000620.png" src="my-assets/assets/pasted-image-20250619000620.png" target="_self"> these are the new packages<br>
+<img alt="Pasted image 20250619000840.png" src="my-assets/assets/pasted-image-20250619000840.png" target="_self"><br>
+<img alt="Pasted image 20250619000634.png" src="my-assets/assets/pasted-image-20250619000634.png" target="_self">sudo apt autoremovesudo apt install packagename sudo apt purge packagenamegetting tools from GitHub
+-is easy just by getting the GitHub link to clone it to your folder example: git clone best folder to store your /opt directory so u know where to find it.Note: always check the user profile if there legit over 700 stars they are safe.Example of git repos
+(1) package fixer for kali if there broken packages
+sudo git clone &lt;Link&gt;<br>
+<img alt="Pasted image 20250619001012.png" src="my-assets/assets/pasted-image-20250619001012.png" target="_self">/opt:
+this directory in Kali Linux is a default directory used to store optional add-ons or packages. It's a common directory in Linux systems where third-party software is installed.]]></description><link>notes/linux/package-management.html</link><guid isPermaLink="false">notes/Linux/Package Management.md</guid><pubDate>Fri, 03 Oct 2025 18:13:08 GMT</pubDate><enclosure url="my-assets/linux-assets/13-41-28-linux-31-jul-2025.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;my-assets/linux-assets/13-41-28-linux-31-jul-2025.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[permissions]]></title><description><![CDATA[by using ls -la we can view permissions on file directory, link
+why do we need to understand file/directory permissions in Linux as cybersecurity student?
+it helps u understand targets file/folder permissions and it is used for Pen-testing when we need to Read , Write, Execute files on target machine.
+By default some executable files are in read/write mode only we have to change there Rights to Execute them.
+<img alt="Pasted image 20250618212339.png" src="my-assets/assets/pasted-image-20250618212339.png" target="_self">
+<br><a href=".?query=tag:resources/linux/users" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/users">#resources/linux/users</a> /tmp folder can be used to have full permissions numeric 2= read 4= write 1=execute example chmod +337
+owner can read and excute 1+2 =3
+user group can read and execute 1 + 2 =3
+other users can read,write and execute 1+2+4 =7 (337) character based write=w execute=x r=Read example:
+chmod +rwx file.txt =&gt; owner will have read,write and execute permission ]]></description><link>notes/linux/permissions.html</link><guid isPermaLink="false">notes/Linux/permissions.md</guid><pubDate>Fri, 03 Oct 2025 17:11:52 GMT</pubDate><enclosure url="." length="0" type="false"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;.&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Download-share-files-Linux]]></title><description><![CDATA[<a href=".?query=tag:resources/linux/basics" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/basics">#resources/linux/basics</a> Allows u to fetch and Download a file from the web just by entering the file url location.
+<br><img alt="Mon-July-linux-05-33.png" src="my-assets/linux-assets/mon-july-linux-05-33.png" target="_self"><br><img alt="Mon-July-linux-05-24.png" src="my-assets/linux-assets/mon-july-linux-05-24.png" target="_self">
+the secure copy(SCP) allows copying file through ssh to provide authentication and encryption .<br>
+<img alt="Mon-July-linux-05-26.png" src="my-assets/linux-assets/mon-july-linux-05-26.png" target="_self">
+<br><img alt="Mon-July-linux-05-40.png" src="my-assets/linux-assets/mon-july-linux-05-40.png" target="_self">]]></description><link>notes/linux/download-share-files-linux.html</link><guid isPermaLink="false">notes/Linux/Download-share-files-Linux.md</guid><pubDate>Fri, 03 Oct 2025 16:51:14 GMT</pubDate><enclosure url="my-assets/linux-assets/mon-july-linux-05-33.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;my-assets/linux-assets/mon-july-linux-05-33.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[view and Manipulate-Files]]></title><description><![CDATA[<a href=".?query=tag:resources/linux/file" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/file">#resources/linux/file</a> In Linux nearly everything u deal with directly is a file and most importantly configuration files.
+All Configuration files are treated as Text file we open them and Manupilate/change them as we need.
+for illustration i will use snort config file to view and manipulatesudo apt install snort
+<br><a href=".?query=tag:resources/linux/file-folder/view" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/file-folder/view">#resources/linux/file-folder/view</a> cat is most common and basic way to view a file, however it has limitations. this will display all config file of snort.<br>
+<img alt="19-56-Linux-23_Jul_2025.png" src="my-assets/linux-assets/19-56-linux-23_jul_2025.png" target="_self"> rather than using cat we can use these options (head,tail) to display a part of the content in a file, by default they display 10 lines content of a file.
+Dont forget to visit there manual tail --help or man head to find more options.
+u can to many complex funtion unlike the using cat.
+head: Beginning content of a file. tail Ending content of a file.<br>
+<img alt="20-26-Linux-23_Jul_2025.png" src="my-assets/linux-assets/20-26-linux-23_jul_2025.png" target="_self"> if u wanna view the specific amount content we use -(n) switch first 20 lines example. head -20 /etc/snort/snort.lua if u wanna view the specific amount content we use -(n) switch last 20 lines example. tail -20 /etc/snort/snort.lua
+<br><img alt="20-43-Linux-23_Jul_2025.png" src="my-assets/linux-assets/20-43-linux-23_jul_2025.png" target="_self">
+We can view the number of the lines by using nl command.
+In this example this config file has 220 lines.
+Keep that in mind that we use nlit skips all blank lines.
+note: there is famous github in zsh shell u can add that can show number of lines and syntax highlighting of the code called batcat its just better version of cat but not do research about it before using it.<br><img alt="20-49-Linux-23_Jul_2025.png" src="my-assets/linux-assets/20-49-linux-23_jul_2025.png" target="_self"><br><img alt="20-55-Linux-23_Jul_2025.png" src="my-assets/linux-assets/20-55-linux-23_jul_2025.png" target="_self">In Linux, you can use less and more to view the contents of a file in the terminal — especially useful for reading long files.
+Think of less like reading a man page.
+It shows one screen at a time, but you can scroll up and down using: Arrow keys
+Page Up / Page Down
+Search with / It's more powerful and flexible than more.
+Example:less filename.txt In Linux, you can use less and more to view the contents of a file in the terminal especially useful for reading long files.
+<br><img draggable="false" class="emoji is-unresolved" alt="📝" src="https://twemoji.maxcdn.com/v/13.1.0/72x72/1f4dd.png" target="_self"> Tip: Use less whenever possible it’s more modern and user-friendly. Think of less like reading a man page.
+It shows one screen at a time, but you can scroll up and down using: Arrow keys
+Page Up / Page Down
+Search with / It's more powerful and flexible than more.
+Example:less filename.txt or
+nl /etc/snort/snort.lua | less <br><img alt="23-01-Linux-23_Jul_2025.png" src="my-assets/linux-assets/23-01-linux-23_jul_2025.png" target="_self"><br>
+<img alt="23-02-Linux-23_Jul_2025.png" src="my-assets/linux-assets/23-02-linux-23_jul_2025.png" target="_self">
+more displays the file page by page.
+Press: Space to go to the next page
+Enter to go line by line You can’t scroll back up, only forward.
+Example:more filename.txt or
+nl /etc/snort/snort.lua | more <br><img alt="23-06-Linux-23_Jul_2025.png" src="my-assets/linux-assets/23-06-linux-23_jul_2025.png" target="_self"><br><a href=".?query=tag:resources/linux/file-folder/manipulate" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/file-folder/manipulate">#resources/linux/file-folder/manipulate</a> for example we can achieve this by piping the output of nl view the file where occurance of a certain word,
+ex: nl /etc/snort/snort.lua | grep configure
+<br><img alt="21-07-Linux-23_Jul_2025.png" src="my-assets/linux-assets/21-07-linux-23_jul_2025.png" target="_self">lets see how complex when we can combine the head or tail, nl and cat with grep . in this example i will use nl to output the file with number of lines and use grep to capture and shorten the output to display the first 4 lines the when statement in lua programming language this is what snort is currently is built with. without combining it with head or tail.<br>
+<img alt="22-34-Linux-23_Jul_2025.png" src="my-assets/linux-assets/22-34-linux-23_jul_2025.png" target="_self"> combining it with head or tail: cat /etc/snort/snort.lua | grep when | head -4 | cat &gt; test.txt | nl test.txt in this example we combined the commands using Piping( | ) to run these commands. I searched and viewed for when statement from snort.lua, take the first 4, save them to test.txt, then try to number them using nl.
+Remark: | (Pipe): Passes output of one command as input to another command.
+<br><img alt="22-49-Linux-23_Jul_2025.png" src="my-assets/linux-assets/22-49-linux-23_jul_2025.png" target="_self"><br><img alt="01-14-Linux-24_Jul_2025.png" src="my-assets/linux-assets/01-14-linux-24_jul_2025.png" target="_self"> view manual about sed first i will cover only the basics of man sed or sed --help. <br>
+sed command can search for occurence of a word inside the File <img draggable="false" class="emoji is-unresolved" alt="📝" src="https://twemoji.maxcdn.com/v/13.1.0/72x72/1f4dd.png" target="_self"> and preform an Action. it can find and replace content of a file <br>
+lets work on this file test
+<img alt="01-30-Linux-24_Jul_2025.png" src="my-assets/linux-assets/01-30-linux-24_jul_2025.png" target="_self"> cat /opt/metasploit-framework/embedded/framework/data/wordlists/password.lst | head -10 | cat &gt; test &amp;&amp; cat test if u dont have the wordlist file just copy this in a file.
+!@#$%
+!@#$%^
+!@#$%^&amp;
+!@#$%^&amp;*
+!boerbul
+!boerseun
+!gatvol
+!hotnot
+!kak
+!koedoe sed -n /text-to-search/p
+-n: Suppresses automatic printing — sed won’t show every line by default.
+/text-to-search/: The pattern you want to search for.
+p: Prints only the lines that match the pattern.
+<br><img draggable="false" class="emoji is-unresolved" alt="📝" src="https://twemoji.maxcdn.com/v/13.1.0/72x72/1f4dd.png" target="_self"> With -n, sed shows only matching lines.
+see the examples:
+<br> <img alt="03-34-Linux-24_Jul_2025.png" src="my-assets/linux-assets/03-34-linux-24_jul_2025.png" target="_self"><br><img alt="03-18-Linux-24_Jul_2025.png" src="my-assets/linux-assets/03-18-linux-24_jul_2025.png" target="_self">Syntax: echo "sed &lt;flag1&gt;/textiwanttochange/New-text-/&lt;flag2&gt; [filepath full path &gt; newpath]"
+flags to use to manipulate a file sand g
+s == subtitute the text to new text
+g == global - all occurance of the word repeated multiple types
+added a multiple occurance to test the g flag of the word !hotnot
+<br><img alt="02-28-Linux-24_Jul_2025.png" src="my-assets/linux-assets/02-28-linux-24_jul_2025.png" target="_self">
+Run the command sed s/hotnot/I-manipulated-you/g ~/test &gt; test2
+<br> <img alt="02-40-Linux-24_Jul_2025.png" src="my-assets/linux-assets/02-40-linux-24_jul_2025.png" target="_self">Before you move on Try to solve this challenge, try out the skill.you learned:
+Navigate to /usr/share/metasploit-framework/data/wordlists. This is a,directory of multiple wordlists that can be used to brute force passwords.
+in various password-protected devices using Metasploit, the most popular pentesting and hacking framework.
+Use the cat command to view the contents of the file password.lst.,
+Use the more command to display the file password.lst.,
+Use the less command to view the file password.lst.,
+Now use the nl command to place line numbers on the passwords in,password.lst. There should be around 88,396 passwords.
+Use the tail command to see the last 20 passwords in password.lst.,
+Use the cat command to display password.Ist and pipe it to find all the passwords that contain 123. sudo find / -type f -name "*word.lst" <br>
+<img alt="00-14-Linux-24_Jul_2025.png" src="my-assets/linux-assets/00-14-linux-24_jul_2025.png" target="_self">cat or nl
+nl /opt/metasploit-framework/embedded/framework/data/wordlists/password.lst <br><img alt="00-22-Linux-24_Jul_2025.png" src="my-assets/linux-assets/00-22-linux-24_jul_2025.png" target="_self">
+finding the last 20 passwords:
+added more line of command save it in a file and show the output
+nl /opt/metasploit-framework/embedded/framework/data/wordlists/password.lst | tail -20 | cat &gt; test &amp;&amp; nl test
+<br><img alt="00-38-Linux-24_Jul_2025.png" src="my-assets/linux-assets/00-38-linux-24_jul_2025.png" target="_self">
+<br>
+Note:When you're searching for something like numbers using grep, avoid using nl (which adds line numbers), because it can interfere with your search results. The line numbers added by nl might confuse grep and give you inaccurate matches. look in the above Screenshot.<img draggable="false" class="emoji is-unresolved" alt="👆" src="https://twemoji.maxcdn.com/v/13.1.0/72x72/1f446.png" target="_self"> cat /opt/metasploit-framework/embedded/framework/data/wordlists/password.lst | grep 123 Instead, use cat to display the file contents and pipe it directly to grep, like this: <br><img alt="00-43-Linux-24_Jul_2025.png" src="my-assets/linux-assets/00-43-linux-24_jul_2025.png" target="_self">]]></description><link>notes/linux/view-and-manipulate-files.html</link><guid isPermaLink="false">notes/Linux/view and Manipulate-Files.md</guid><pubDate>Fri, 03 Oct 2025 16:46:31 GMT</pubDate><enclosure url="my-assets/linux-assets/19-56-linux-23_jul_2025.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;my-assets/linux-assets/19-56-linux-23_jul_2025.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Basic-Terms-Linux]]></title><description><![CDATA[<a href=".?query=tag:resources/linux/basics/terms" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/basics/terms">#resources/linux/basics/terms</a> Binary is a file that can be executed similar to windows .exe reside in /usr/bin or /usr/sbin and also applications. Linux File system is Case Sensitive ex: Desktop not desktop Directories == Folders in windows terms. /home this are user home directory KaliLinux is A Distribution of Debian based Linux same as ubuntu. Personalized for Pen-testers and Red teaming. root user is a supreme user used to preform Privileged task ex: changes users change passwords we access supreme user by switching to it su root or we use sudo Most of the Tools in Kali works on root Script is a series of commands runs in interpretive environment(Line by line)
+helps to build automated Tools. shell is an environment and interpreter for the commands ex: of a shell bash other shells z shell command line Interface CLI. it is a line of code telling system to use specific interpreter.
+#!/usr/bin/env python3
+#!/bin/bash
+<br><a href=".?query=tag:resources/linux/shebang" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/shebang">#resources/linux/shebang</a>]]></description><link>notes/linux/basic-terms-linux.html</link><guid isPermaLink="false">notes/Linux/Basic-Terms-Linux.md</guid><pubDate>Fri, 03 Oct 2025 16:33:02 GMT</pubDate></item><item><title><![CDATA[Searching in Linux]]></title><description><![CDATA[<a href=".?query=tag:resources/linux/file-folder/search" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/file-folder/search">#resources/linux/file-folder/search</a> locate
+whereis
+which
+find this command go through your entire file system and locate every occurence of the word wriiten
+ex:<br>
+<img alt="00-33-Linux-Tue-Jul-2025.png" src="my-assets/linux-assets/00-33-linux-tue-jul-2025.png" target="_self">
+sometimes the result of locate is overwhelming or not practical
+also locate command Database doesn't update in current time it takes update once a day whereis helps to locate a binary file, this command returns not olny the location of the file /folder, it returns source and man-page if they are avaliable.
+ex:<br>
+<img alt="00-42-Linux-Tue-Jul-2025.png" src="my-assets/linux-assets/00-42-linux-tue-jul-2025.png" target="_self"> its more specific only returns the location of the binaries PATH Variable. Note: PATH is an environment variable stores the location of the file/directory.
+ex:<br>
+<img alt="01-17-Linux-Tue-Jul-2025.png" src="my-assets/linux-assets/01-17-linux-tue-jul-2025.png" target="_self"> the find command utility is the best of them all because it contains more detailed search features ex : it can give the permission, the owner, the group and lastley the date of a file while searching for it. find walks through every folder and subfolder starting from the location you tell it (or your current folder if you don’t specify).<br>
+Tips <img draggable="false" class="emoji is-unresolved" alt="✨" src="https://twemoji.maxcdn.com/v/13.1.0/72x72/2728.png" target="_self"> Use . to search from where you are. Use /path/to/folder to search from a specific folder. Use -name to search by file name. Syntaxfind &lt;/directory&gt; -type &lt;f/d/l&gt; -name search_thing -type f searching for a file -type d searching for a Directory. type l search for symbolic link <br><img alt="01-19-Linux-Tue-Jul-2025.png" src="my-assets/linux-assets/01-19-linux-tue-jul-2025.png" target="_self"><br><img alt="01-36-Linux-Tue-Jul-2025.png" src="my-assets/linux-assets/01-36-linux-tue-jul-2025.png" target="_self"> Wildcards searching ex: *.md:<br>
+<img alt="01-39-Linux-Tue-Jul-2025.png" src="my-assets/linux-assets/01-39-linux-tue-jul-2025.png" target="_self">to understand about wild card with usages in linux we will create empty files ./home/kali/ hat bat cat and whattouch /home/kali/hat /home/kali/bat /home/kali/cat /home/kali/what──(kali㉿kali)-[~]
+└─$ find . -type f -name "[w]hat"
+./what ┌──(kali㉿kali)-[~]
+└─$ find . -type f -name "[b]at" ./bat ┌──(kali㉿kali)-[~]
+└─$ find . -type f -name "[cb]at"
+./bat
+./cat grep help us to search in files or config files and can be combined with other commands using piping |.
+| grep most commonly used in piping because allows grep to grap the output of the previous command then can be used as an input. see how the grep filtered the output of the findcommand<br>
+<img alt="02-43-Linux-Tue-Jul-2025.png" src="my-assets/linux-assets/02-43-linux-tue-jul-2025.png" target="_self"> as u can see the output gave us occurrence of the word linux in my .md file.
+<br><img alt="03-09-Linux-Tue-Jul-2025.png" src="my-assets/linux-assets/03-09-linux-tue-jul-2025.png" target="_self"><br><img alt="03-19-Linux-Tue-Jul-2025.png" src="my-assets/linux-assets/03-19-linux-tue-jul-2025.png" target="_self">]]></description><link>notes/linux/searching-in-linux.html</link><guid isPermaLink="false">notes/Linux/Searching in Linux.md</guid><pubDate>Fri, 03 Oct 2025 15:54:31 GMT</pubDate><enclosure url="my-assets/linux-assets/00-33-linux-tue-jul-2025.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;my-assets/linux-assets/00-33-linux-tue-jul-2025.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Linux-shells-overview]]></title><description><![CDATA[
+A shell Offers the User to Interacts with OS using CLI , which is Resource Friendly Interface.
+<a href=".?query=tag:resources/linux/shells" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/shells">#resources/linux/shells</a> Bash (bourne Again Shell ) is Default shell for Linux Distros.
+Bash support Scripting Capabilities.
+Bash keeps History file and Logs every command
+Note: use history To view your commands History. The Modern Shell
+Highly Customizable User Friendly
+Auto command Correction scp username@server_ip:/path/to/remote/file "C:\path\to\local\folder" ]]></description><link>notes/linux/linux-shells-overview.html</link><guid isPermaLink="false">notes/Linux/Linux-shells-overview.md</guid><pubDate>Fri, 03 Oct 2025 15:08:43 GMT</pubDate></item><item><title><![CDATA[Linux basics cheat-sheet]]></title><description><![CDATA[ <a href=".?query=tag:resources/linux/basics" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/basics">#resources/linux/basics</a>
+pwd: Prints the current working directory.
+ls : Lists the files and directories in the current directory.
+ls -l: Lists files in long format (with permissions, owner, etc.).
+ls -a: Lists all files, including hidden ones.
+cd [directory]: Changes the directory.
+cd ..: Goes back to the previous directory (parent directory).
+cd ~: Changes to the home directory.
+cd - : return to Previous PATH/directory
+mkdir [directory_name]: Creates a new directory.
+rmdir [directory_name]: Removes an empty directory.
+touch [file_name]: Creates an empty file or updates the modification time if the file exists.
+cp [source][destination]: Copies a file or directory.
+mv [source] [destination]: Moves or renames a file or directory.
+rm [file_name]: Removes a file.
+rm -r [directory_name]: Removes a directory and its contents recursively.
+cat [file_name]: Displays the contents of a file.
+nano [file_name]: Opens a file in the nano text editor.
+clear: Clears the terminal screen. uname -a: Displays information about the system.
+df -h: Shows disk space usage in human-readable format.
+du -sh [directory]: Displays the disk usage of a directory.
+top: Shows a real-time view of system processes and resource usage.
+htop: An improved version of top (requires installation: sudo apt install htop).
+free -h: Displays the amount of free and used memory in the system.
+uptime: Shows how long the system has been running.
+whoami: Prints the current logged-in username.
+hostname: Displays the system's hostname. chmod [permissions] [file]: Changes the file's permissions. Example: chmod 755 file.sh gives the owner full permissions, and others read and execute permissions.
+chmod +x [file]: Makes a file executable. chown [user:group] [file]: Changes the file's ownership. Example: chown user:user file.txt ifconfig: Displays network interface configuration.
+ip a: Shows IP address and network interfaces.
+ping [domain]: Tests network connectivity to a domain or IP address.
+curl [URL]: Downloads content from a URL.
+wget [URL]: Another way to download files from a URL.
+ssh [user]@[hostname]: Connects to a remote system via SSH. sudo apt update: Updates the package list.
+sudo apt upgrade: Installs available updates.
+sudo apt install [package_name]: Installs a package
+sudo apt remove [package_name]: Removes a package.
+sudo apt autoremove: Removes unnecessary packages. ps aux: Lists running processes.
+kill [PID]: Kills a process by its PID (Process ID).
+killall [process_name]: Kills all instances of a specific process.
+bg: Resumes a suspended job in the background.
+fg: Brings a background job to the foreground. sudo adduser [username]: Adds a new user.
+sudo deluser [username]: Deletes a user.
+passwd [username]: Changes the password for a user. tar -cvf archive.tar [files]: Creates a tar archive.
+tar -xvf archive.tar: Extracts a tar archive.
+gzip [file]: Compresses a file using gzip.
+gunzip [file.gz]: Decompresses a gzip file. find [path] -name [file_name]: Finds a file by name.
+grep '[pattern]' [file]: Searches for a pattern in a file. Example: grep 'error' log.txt will search for the word 'error' in the log.txt file. sudo [command]: Runs a command as the superuser (admin privileges).
+su [username]: Switches to another user. fdisk -l: Lists all available partitions.
+mount [device] [directory]: Mounts a device to a directory.
+umount [device/directory]: Unmounts a device. history: Displays the list of recently executed commands.
+!!: Repeats the last command.
+!n: Executes the nth command in history.
+Ctrl + C: Stops the current command.
+Ctrl + Z: Suspends the current command.
+Ctrl + A: Moves the cursor to the beginning of the line.
+Ctrl + E: Moves the cursor to the end of the line.
+• wget -c [URL]: Downloads a file from a URL and continues if interrupted.
+• curl -O [URL]: Downloads a file from a URL.
+zip [archive.zip] [file1] [file2]: Creates a zip archive.
+unzip [archive.zip]: Extracts a zip archive.
+tar -cvzf archive.tar.gz [files]: Creates a gzipped tar archive.
+tar -xvzf archive.tar.gz: Extracts a gzip man stands for manual it helps you to view manual how to use the commands. man command in Linux its useful in case no network connection*.
+It is ideal for deep understanding or troubleshooting more complex command behavior. also It requires that manual pages are installed on the system. The --help flag provides a quick, concise overview of a command's usage, available options, and syntax. It is useful for fast reference when you need a basic understanding or want to quickly see available flags.
+Not all commands support --help. <br><a href=".?query=tag:resources/linux/basics" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/basics">#resources/linux/basics</a>
+Switch (-): Short, single-letter option.
+Example: ls -a → show hidden files. Flag (--): Long, descriptive option.
+Example: ls --help → show help message. <br><img alt="Pasted image 20251003190224.png" src="my-assets/clipboard-assets/pasted-image-20251003190224.png" target="_self">]]></description><link>notes/linux/linux-basics-cheat-sheet.html</link><guid isPermaLink="false">notes/Linux/Linux basics cheat-sheet.md</guid><pubDate>Fri, 03 Oct 2025 15:04:29 GMT</pubDate><enclosure url="." length="0" type="false"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;.&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[sudoers file]]></title><description><![CDATA[<a href=".?query=tag:resources/linux/users" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/users">#resources/linux/users</a>
+Location: /etc/sudoers Controls who can use sudo (run commands as admin). Example:
+%sudo ALL=(ALL:ALL) ALL → Anyone in the sudo group can run any command as admin. Always edit with:
+sudo visudo Check what you can run with sudo:
+sudo -l Become root:
+sudo su # root shell
+sudo -i # root login shell See who’s in the sudo group:
+grep 'sudo' /etc/group <br><img alt="Pasted image 20250618211118.png" src="my-assets/assets/pasted-image-20250618211118.png" target="_self">
+/etc/passwd → Lists all users (username, home folder, shell). /etc/shadow → Stores encrypted passwords (only root can read). /etc/group → Lists groups and members. /etc/passwd shows usernames and services. /etc/shadow (if you can read it) has password hashes that attackers might crack. Knowing users = important step in hacking challenges. ]]></description><link>notes/linux/sudoers-file.html</link><guid isPermaLink="false">notes/Linux/sudoers file.md</guid><pubDate>Fri, 03 Oct 2025 13:35:54 GMT</pubDate><enclosure url="." length="0" type="false"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;.&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Linux fundamentals-LFS]]></title><description><![CDATA[<img alt="linux-filesystem.png" src="my-assets/linux-assets/linux-filesystem.png" target="_self">
+/ : is the Base Directory or Called Root Directory Not root user
+/root: home directory for the supreme Root user. /etc: contains Linux config Files and other sensitive information /mnt: other file systems are mounted.
+/media: where usb and CD's are attached or mounted.
+/bin:where Binaries/apps files located.
+/lib: where shared programs resides.
+<br><a href=".?query=tag:resources/linux/LFS" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/LFS">#resources/linux/LFS</a> to access base Directory we type cd /<br><img alt="Sun-July-linux-17-35.png" src="my-assets/linux-assets/sun-july-linux-17-35.png" target="_self">login to and control the terminals of remote machines. Not only this, but the room will also have you: Unlocking the potential of your first few commands by introducing you to using flags and arguments Advancing your knowledge of the filesystem to perform some more useful commands such as copying and moving files Discovering how access to files and folders is managed and how we can determine our access. Great place to Store random notes or Enumeration Scripts
+<br><img alt="Sun-July-linux-18-42.png" src="my-assets/linux-assets/sun-july-linux-18-42.png" target="_self">
+Note Linux uses sha512 to hash a passwords etc/shadow<br>
+<img alt="Sun-July-linux-18-28.png" src="my-assets/linux-assets/sun-july-linux-18-28.png" target="_self">
+┌──(kali㉿kali)-[~/Desktop/Linux]
+└─$ sudo cat /etc/shadow | grep root
+root:*:20201:0:99999:7::: ┌──(kali㉿kali)-[~/Desktop/Linux]
+└─$ Explanation of Each Field
+username: The name of the user account. In your example, it is root, which is the superuser account in Linux.
+password: This field typically contains the hashed password for the user. In your example, it is represented by an asterisk (*), which indicates that the account is locked or that no password is set.
+last change: This field indicates the number of days since January 1, 1970, when the password was last changed. In your example, it is 20201, which corresponds to a specific date.
+min: The minimum number of days required between password changes. A value of 0 means that the user can change their password at any time.
+max: The maximum number of days the password is valid. After this period, the user will be required to change their password. In your example, it is 99999, which effectively means the password does not expire.
+warn: The number of days before password expiration during which the user is warned to change their password. In your example, it is 7, meaning the user will be warned 7 days before the password expires.
+inactive: The number of days after a password expires until the account is permanently disabled. In your example, this field is empty, indicating that there is no inactive period set.
+expire: The date on which the account will be disabled, represented as the number of days since January 1, 1970. In your example, this field is empty, meaning the account does not have a set expiration date.
+<br><img alt="Sun-July-linux-18-41.png" src="my-assets/linux-assets/sun-july-linux-18-41.png" target="_self"><br><img alt="Sun-July-linux-18-41_1.png" src="my-assets/linux-assets/sun-july-linux-18-41_1.png" target="_self"><br><img alt="Sun-July-linux-18-49.png" src="my-assets/linux-assets/sun-july-linux-18-49.png" target="_self">]]></description><link>notes/linux/linux-fundamentals-lfs.html</link><guid isPermaLink="false">notes/Linux/Linux fundamentals-LFS.md</guid><pubDate>Fri, 03 Oct 2025 01:46:11 GMT</pubDate><enclosure url="my-assets/linux-assets/linux-filesystem.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;my-assets/linux-assets/linux-filesystem.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Introduction to Bash Scripting]]></title><description><![CDATA[<a href=".?query=tag:resources/linux/bash" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/bash">#resources/linux/bash</a> usually when we run ping command ping 192.168.x.x it gives this output, by sending icmp packet.
+if the system receives icmp packet back it means the other system is alive/connected to the same network.
+PING 192.168.3.2 (192.168.3.2) 56(84) bytes of data.
+64 bytes from 192.168.3.2: icmp_seq=1 ttl=128 time=0.929 ms
+^C
+--- 192.168.3.2 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.929/0.929/0.929/0.000 ms as u can see down below this is bash script that check if the system is alive by sending icmp packet
+#!/bin/bash
+if [ "$1" == "" ]; then # if $1 == null --&gt; this passes anrgument and arguments are written by the user echo "Type the IP Address!" echo "This is the syntax: ./filename.sh 192.168.1"
+else # if $1 is not null it will execute the ping command for ip in `seq 1 254`; do ping -c 1 $1.$ip | grep "64 bytes" | cut -d " " -f 4 | tr -d ":" &amp; done
+fi # ending the statement #!/bin/bash the shebang, this tells the interpreter to execute as a bash file .sh
+like in any programming Language we can use if/else statement to preform conditions.
+In the else we made a for loop that check the IP subnet seq 1 254 of /24 prefix 192.168.1.x
+by using pipe | we combine the ping commands and formatting methods and filtering this output: 64 bytes from 192.168.3.2: icmp_seq=1 ttl=128 time=0.929 ms
+grep "64 bytes" this grabs the line as shown above then we use cut -d "space" -f 4 to cut the delimiter till it finds the ipv4 and filter the ping response. this what remains after cutting 192.168.2.2: then we use tr -d ":" = translate to remove the ":".
+<br><img alt="Pasted image 20250622222331.png" src="my-assets/assets/pasted-image-20250622222331.png" target="_self"> then we are left we a clean ipv4 address example `192.168.1.1 Now the output of the for loop will give u the IP's of alive system on your network run this commands to execute the code.
+$1 is a paremeter will be taken by You who is running the script its like providing input in python
+sudo chmod +x # assuming that the file is not executable.
+./pingsweeper 192.168.1 # the $1 value --&gt; specify your ip subnet.
+#!/bin/bash
+echo "starting Mysetup"
+konsole &amp;
+sleep 2
+firefox &amp;
+sleep 2
+zettlr &amp;
+sleep 2
+flameshot &amp;
+echo "hey,what's Your "
+read name
+echo "welcome,$name" for i in {1..10};
+do
+echo $i
+done echo "Hey What is your Name"
+read name
+echo "Welcome,$name" echo "Pleae enter Your name Alias:"
+read name2 if [ "$name2" = "meezok" ]; then echo "Welcome $name : Here is Temp login Password : IloveYou"
+else echo "Sorry! You are not Authorized To Access" ip a
+fi for i in {1..10};
+do
+echo $i
+done #!/bin/bash echo "-----ENTER YOUR CREDITENTAILS To Unlock THE VAULT-----"
+username=""
+company=""
+pin="" for i in {1..3}; do
+# Defining the conditional statements if [ "$i" -eq 1 ]; then echo "Enter your Username:" read username elif [ "$i" -eq 2 ]; then echo "Enter your Company name:" read companyname else echo "Enter your PIN:" read pin fi
+done # Checking if the user entered the correct details
+if [ "$username" = "meezok" ] &amp;&amp; [ "$company" = "utas" ] &amp;&amp; [ "$pin" = "4321" ]; then echo "Authentication Successful. You can now access your locker, John."
+else echo "Authentication Denied!!"
+fi ]]></description><link>notes/linux/introduction-to-bash-scripting.html</link><guid isPermaLink="false">notes/Linux/Introduction to Bash Scripting.md</guid><pubDate>Fri, 03 Oct 2025 01:36:23 GMT</pubDate><enclosure url="." length="0" type="false"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;.&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Environment-variables]]></title><description><![CDATA[<a href=".?query=tag:resources/linux/variables" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/variables">#resources/linux/variables</a> in Linux there is 2 types of Variables: shell variables = denoted by lower-case $shell. Enviroment variables denoted by upper-case $SHELL these Variables are built in our system or added after installing Tools or application it store key=value pair that control process and Interfaces(genome/Wayland) in linux system. Example: SHELL=/bin/zsh
+Also it can contain multiple values like key=val1:val2:val3.
+env
+printenv we can view all shell and Environment variables.
+set | less Utilize grep to FILTER for particular variable.
+set | grep HISTSIZE
+<br><img alt="Screenshot 2025-10-03 020849.png" src="my-assets/clipboard-assets/screenshot-2025-10-03-020849.png" target="_self">
+this varaible will not availiable globally only limited to that terminal session.
+if u close the terminal the saved Enviroment variable will reset to the Oraginal Value
+or the Stored Variable will be Lost after Closing the Terminal.
+Example:EXAMPLE=8.8.8.8
+<br><img alt="Screenshot 2025-10-03 022931.png" src="my-assets/clipboard-assets/screenshot-2025-10-03-022931.png" target="_self">
+Changing the Shell Prompt.
+PS1 is an environment variable in Linux that defines the primary prompt string displayed in the terminal, allowing customization of the command prompt appearance.
+PS1='C:\w &gt;' # \w = directoey # \u = user # \h = hostname
+<br><img alt="Screenshot 2025-10-03 032828.png" src="my-assets/clipboard-assets/screenshot-2025-10-03-032828.png" target="_self">
+creating the varaible that can be called in multiple terminal sessions.
+IP=1.1.1.1
+export IP
+SCREENSHOST MULTIPLE SESSIONS
+Set up the Variable to exported<br>
+<img alt="Screenshot 2025-10-03 035839.png" src="my-assets/clipboard-assets/screenshot-2025-10-03-035839.png" target="_self">
+Checking if the the Variable can be called in other terminal sessions Note: I am using tmux.
+<br><img alt="Screenshot 2025-10-03 035955.png" src="my-assets/clipboard-assets/screenshot-2025-10-03-035955.png" target="_self">
+Example use Case of Variable.<br>
+<img alt="Screenshot 2025-10-03 040435.png" src="my-assets/clipboard-assets/screenshot-2025-10-03-040435.png" target="_self">
+]]></description><link>notes/linux/environment-variables.html</link><guid isPermaLink="false">notes/Linux/Environment-variables.md</guid><pubDate>Fri, 03 Oct 2025 00:24:55 GMT</pubDate><enclosure url="." length="0" type="false"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;.&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Grep-Cheat-sheet]]></title><description><![CDATA[<a href=".?query=tag:cheatsheet/linux/grep" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#cheatsheet/linux/grep">#cheatsheet/linux/grep</a> Find Apache + PHP in exploits: searchsploit | grep -i apache | grep -i php Find Apache 2.x versions: searchsploit | grep -E "apache 2\.[0-9]+\.[0-9]+" Grab only service + version line from nmap: nmap -sV target | grep -i "service\|version" Extract only IPs: grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}" file.txt
+]]></description><link>notes/cheatsheets/grep-cheat-sheet.html</link><guid isPermaLink="false">notes/Cheatsheets/Grep-Cheat-sheet.md</guid><pubDate>Mon, 22 Sep 2025 15:54:28 GMT</pubDate><enclosure url="https://twemoji.maxcdn.com/v/13.1.0/72x72/1f50d.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;https://twemoji.maxcdn.com/v/13.1.0/72x72/1f50d.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Processes and Task Automation]]></title><description><![CDATA[<a href=".?query=tag:resources/linux/proccesses/Automation/at" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/proccesses/Automation/at">#resources/linux/proccesses/Automation/at</a> Scheduling Processes with at it Automate tasks to run once in the future perfect for backups, scans, or delayed execution.<br>
+<img alt="12-50-12-linux-31-Jul-2025.png" src="my-assets/linux-assets/12-50-12-linux-31-jul-2025.png" target="_self">
+at [TIME]
+<br><img draggable="false" class="emoji is-unresolved" alt="📌" src="https://twemoji.maxcdn.com/v/13.1.0/72x72/1f4cc.png" target="_self"> Then type the command(s) to run
+Press Ctrl + D to finish.at now + 3 minutes
+When prompted:./script.sh
+Then press Ctrl + D to schedule it.Use atq to list jobs
+Use atrm &lt;job#&gt; to delete a scheduled job<br><img alt="13-08-28-linux-31-Jul-2025.png" src="my-assets/linux-assets/13-08-28-linux-31-jul-2025.png" target="_self">
+atd daemon must be running (sudo systemctl start atd)<br><img alt="13-03-37-linux-31-Jul-2025.png" src="my-assets/linux-assets/13-03-37-linux-31-jul-2025.png" target="_self"><br><a href=".?query=tag:resources/linux/proccesses/Automation/cron" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/proccesses/Automation/cron">#resources/linux/proccesses/Automation/cron</a> cron can automate and run specific command at curtain time in loop also
+Users may want to schedule a certain action or task to take place after the system has booted. Take, for example, running commands, backing up files, or launching your favourite programs on, such as Spotify or Google Chrome.
+We're going to be talking about the cron process, but more specifically, how we can interact with it via the use of crontabs . Crontab is one of the processes that is started during boot, which is responsible for facilitating and managing cron jobs.
+<br>Website helps u to setup a crontabs <a data-tooltip-position="top" aria-label="https://crontab-generator.org/" rel="noopener nofollow" class="external-link is-unresolved" href="https://crontab-generator.org/" target="_self">Crontab Generator</a> and <a data-tooltip-position="top" aria-label="https://crontab.guru/" rel="noopener nofollow" class="external-link is-unresolved" href="https://crontab.guru/" target="_self">Crontab Guru</a>.
+]]></description><link>notes/linux/processes-and-task-automation.html</link><guid isPermaLink="false">notes/Linux/Processes and Task Automation.md</guid><pubDate>Wed, 13 Aug 2025 08:38:38 GMT</pubDate><enclosure url="my-assets/linux-assets/12-50-12-linux-31-jul-2025.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;my-assets/linux-assets/12-50-12-linux-31-jul-2025.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Network Commands]]></title><description><![CDATA[<a href=".?query=tag:resources/linux/network" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/network">#resources/linux/network</a>
+legacy version of showing interface and IP configuration on device on host machine
+<br><img alt="Pasted image 20250618205212.png" src="my-assets/assets/pasted-image-20250618205212.png" target="_self">
+ip addressing its the new version of ifconfig show ip config and interfaces on host machine<br>
+<img alt="Pasted image 20250618205236.png" src="my-assets/assets/pasted-image-20250618205236.png" target="_self">
+<br><a href=".?query=tag:resources/networking/arp" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/networking/arp">#resources/networking/arp</a> Arp == Address Resolution Protocol:
+its a protocol used to find Mac Address of its given IP Address.
+<br><a href=".?query=tag:resources/networking" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/networking">#resources/networking</a> shows routing table information<br>
+<img alt="Pasted image 20250618210039.png" src="my-assets/assets/pasted-image-20250618210039.png" target="_self">
+]]></description><link>notes/linux/network-commands.html</link><guid isPermaLink="false">notes/Linux/Network Commands.md</guid><pubDate>Mon, 04 Aug 2025 10:08:00 GMT</pubDate><enclosure url="." length="0" type="false"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;.&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Maintain-logs-incomplete]]></title><description><![CDATA[<a href=".?query=tag:resources/linux/logs" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/logs">#resources/linux/logs</a>
+logs are always stored /var/log
+these files and folders contain logging information for applications and services running on your system. The Operating System (OS) has become pretty good at automatically managing these logs in a process that is known as "rotating".
+These services and logs are a great way in monitoring the health of your system and protecting it. Not only that, but the logs for services such as a web server contain information about every single request - allowing developers or administrators to diagnose performance issues or investigate an intruder's activity. For example, the two types of log files below that are of interest: access log
+error log
+]]></description><link>notes/linux/maintain-logs-incomplete.html</link><guid isPermaLink="false">notes/Linux/Maintain-logs-incomplete.md</guid><pubDate>Fri, 01 Aug 2025 23:43:10 GMT</pubDate></item><item><title><![CDATA[Searching Files Linux-cheat-sheet]]></title><description><![CDATA[<a href=".?query=tag:resources/linux/search" class="tag is-unresolved" target="_self" rel="noopener nofollow" data-href="#resources/linux/search">#resources/linux/search</a> <br><img draggable="false" class="emoji is-unresolved" alt="✅" src="https://twemoji.maxcdn.com/v/13.1.0/72x72/2705.png" target="_self"> Tips:
+Use grep when you're looking inside files.
+Use find when you're looking for files themselves.
+Would you like this saved as a downloadable .md file or copied to your Obsidian vault?]]></description><link>notes/linux/searching-files-linux-cheat-sheet.html</link><guid isPermaLink="false">notes/Linux/Searching Files Linux-cheat-sheet.md</guid><pubDate>Wed, 23 Jul 2025 03:28:06 GMT</pubDate><enclosure url="https://twemoji.maxcdn.com/v/13.1.0/72x72/1f9fe.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;https://twemoji.maxcdn.com/v/13.1.0/72x72/1f9fe.png&quot;&gt;&lt;/figure&gt;</content:encoded></item></channel></rss>
